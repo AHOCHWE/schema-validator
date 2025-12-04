@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "This file will contain an allOf array with multiple if-then-else rules. The Conditional is applied on the elements of ApplicationRequest object.",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "customerCategory": {
+            "const": "Company"
+          }
+        },
+        "required": [
+          "customerCategory"
+        ]
+      },
+      "then": {
+        "required": [
+          "agencyId",
+          "requestType"
+        ],
+        "not": {
+          "required": [
+            "address",
+            "individualDisclosure"
+          ]
+        },
+        "x-errorMessage": {
+          "required": {
+            "agencyId": "Property agencyId is required for customerCategory Company",
+            "requestType": "Property requestType is required for customerCategory Company"
+          },
+          "not": "Properties address and individualDisclosure must be omitted for customerCategory Company"
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "customerCategory": {
+            "const": "Private"
+          }
+        },
+        "required": [
+          "customerCategory"
+        ]
+      },
+      "then": {
+        "required": [
+          "address",
+          "individualDisclosure"
+        ],
+        "not": {
+          "required": [
+            "agencyId",
+            "requestType"
+          ]
+        },
+        "x-errorMessage": {
+          "required": {
+            "address": "Property address is required for customerCategory Private",
+            "individualDisclosure": "Property individualDisclosure is required for customerCategory Private"
+          },
+          "not": "Properties agencyId and requestType must be omitted for customerCategory Private"
+        }
+      }
+    }
+  ]
+}

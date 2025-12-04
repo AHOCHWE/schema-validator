@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "classpath:/schemas/Address.json",
+  "type": "object",
+  "properties": {
+    "city": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "number": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "street": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "zipCode": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "city",
+    "number",
+    "street",
+    "zipCode"
+  ],
+  "additionalProperties": false
+}

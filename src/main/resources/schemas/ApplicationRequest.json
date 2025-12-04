@@ -1,0 +1,44 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "classpath:/schemas/ApplicationRequest.json",
+	"description": "Request for retrieving Borrower Units (KNE) from Crefosystem (Business) or Boniversum (Individual)",
+	 "type": "object",
+	  "properties": {
+	    "address": {
+	      "$ref": "./request/Address.json"
+	    },
+	    "agencyId": {
+	      "description": "Creditreform number",
+	      "type": "string",
+	      "minLength": 14,
+	      "maxLength": 14
+	    },
+	    "customerCategory": {
+	      "description": "Indicates if the borrower is a private person or a company",
+	      "enum": [
+	        "Company",
+	        "Private"
+	      ],
+	      "type": "string"
+	    },
+	    "individualDisclosure": {
+	      "$ref": "./request/IndividualDisclosure.json"
+	    },
+	    "requestType": {
+	      "description": "Type of request for Crefosystem. Possible options are 'kne-inquiry' (New request) or 'kne-overview' (Status of existing request). Currently only 'kne-inquiry' is in use",
+	      "type": "string",
+	      "enum": [
+	        "kne-inquiry"
+	      ]
+	    }
+	  },
+	  "required": [
+	    "customerCategory"
+	  ],
+	  "allOf": [
+	    {
+	      "$ref": "./conditions/ApplicationConditional.json"
+	    }
+	  ],
+	  "additionalProperties": false
+	}
