@@ -1,15 +1,15 @@
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.networknt.schema.JsonSchema;
-import com.networknt.schema.JsonSchemaFactory;
-import com.networknt.schema.PathType;
-import com.networknt.schema.SchemaValidatorsConfig;
-import com.networknt.schema.SpecVersionDetector;
-import com.networknt.schema.ValidationMessage;
+import com.networknt.schema.Error;
+import com.networknt.schema.Schema;
+import com.networknt.schema.SchemaRegistry;
+import com.networknt.schema.SchemaRegistryConfig;
+import com.networknt.schema.SpecificationVersion;
+import com.networknt.schema.path.PathType;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Set;
+import java.util.List;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 public class SchemaValidation {
   //static String INPUT_FILE = "Missing_ApplicationId.json";
@@ -31,18 +31,34 @@ public class SchemaValidation {
 
     if (DEBUG) System.out.println(inputNode);
 
-    JsonSchemaFactory factory = JsonSchemaFactory.getInstance(SpecVersionDetector.detect(schemaNode));
+    /* Works with 1.4.3
+     * JsonSchemaFactory factory = JsonSchemaFactory.getInstance(SpecVersionDetector.detect(schemaNode));
+     *
+     * SchemaValidatorsConfig config = SchemaValidatorsConfig
+     * .builder()
+     * .errorMessageKeyword("x-errorMessage")
+     * .pathType(PathType.JSON_PATH)
+     * .build();
+     *
+     * JsonSchema jsonSchema = factory.getSchema(schemaNode, config);
+     *
+     * Set<ValidationMessage> errors = jsonSchema.validate(inputNode);
+     * printValidationMessages(errors);
+     */
 
-    SchemaValidatorsConfig config = SchemaValidatorsConfig
+    SchemaRegistryConfig config = SchemaRegistryConfig
       .builder()
       .errorMessageKeyword("x-errorMessage")
       .pathType(PathType.JSON_PATH)
       .build();
 
-    JsonSchema jsonSchema = factory.getSchema(schemaNode, config);
+    SchemaRegistry registry = SchemaRegistry.withDefaultDialect(
+      SpecificationVersion.DRAFT_7,
+      builder -> builder.schemaRegistryConfig(config)
+    );
 
-    Set<ValidationMessage> errors = jsonSchema.validate(inputNode);
-
+    Schema schema = registry.getSchema(schemaNode);
+    List<Error> errors = schema.validate(inputNode);
     printValidationErrors(errors);
   }
 
@@ -70,14 +86,28 @@ public class SchemaValidation {
    *
    * @param errors set of validation messages
    */
-  private static void printValidationErrors(Set<ValidationMessage> errors) {
+  /* Works with 1.4.3
+   * private static void printValidationMessages(Set<ValidationMessage> errors) {
+   * if (errors == null || errors.isEmpty()) {
+   * System.out.println("No validation errors."); return; }
+   *
+   * System.out.println("Validation Errors:"); for (ValidationMessage error :
+   * errors) { System.out.println("- " + error.getMessage()); } }
+   */
+
+  /**
+   * Prints all validation errors.
+   *
+   * @param errors list of validation errors
+   */
+  private static void printValidationErrors(List<Error> errors) {
     if (errors == null || errors.isEmpty()) {
       System.out.println("No validation errors.");
       return;
     }
 
     System.out.println("Validation Errors:");
-    for (ValidationMessage error : errors) {
+    for (Error error : errors) {
       System.out.println("- " + error.getMessage());
     }
   }
