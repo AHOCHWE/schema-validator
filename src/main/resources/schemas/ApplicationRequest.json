@@ -16,7 +16,8 @@
 	    "customerCategory": {
 	      "description": "Indicates if the borrower is a private person or a company",
 	      "enum": [
-	        "Company"
+	        "Company",
+			"Private"
 	      ],
 	      "type": "string"
 	    },

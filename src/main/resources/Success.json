@@ -1,7 +1,5 @@
 {
 	"agencyId": "12345678901234",
     "requestType": "kne-inquiry",
-    "customerCategory": "Private",
-	"individualDisclosure": {
-	}
+    "customerCategory": "Private"
 }

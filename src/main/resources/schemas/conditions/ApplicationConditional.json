@@ -18,18 +18,33 @@
           "agencyId",
           "requestType"
         ],
-        "not": {
-          "required": [
-            "address",
-            "individualDisclosure"
-          ]
-        },
+        "allOf": [
+          {
+            "not": {
+              "required": [
+                "address"
+              ]
+            },
+            "x-errorMessage": {
+              "not": "Property address must be omitted for customerCategory Company"
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "individualDisclosure"
+              ]
+            },
+            "x-errorMessage": {
+              "not": "Property individualDisclosure must be omitted for customerCategory Company"
+            }
+          }
+        ],
         "x-errorMessage": {
           "required": {
             "agencyId": "Property agencyId is required for customerCategory Company",
             "requestType": "Property requestType is required for customerCategory Company"
-          },
-          "not": "Properties address and individualDisclosure must be omitted for customerCategory Company"
+          }
         }
       }
     },
@@ -49,18 +64,33 @@
           "address",
           "individualDisclosure"
         ],
-        "not": {
-          "required": [
-            "agencyId",
-            "requestType"
-          ]
-        },
+        "allOf": [
+          {
+            "not": {
+              "required": [
+                "agencyId"
+              ]
+            },
+            "x-errorMessage": {
+              "not": "Property agencyId must be omitted for customerCategory Private"
+            }
+          },
+          {
+            "not": {
+              "required": [
+                "requestType"
+              ]
+            },
+            "x-errorMessage": {
+              "not": "Property requestType must be omitted for customerCategory Private"
+            }
+          }
+        ],
         "x-errorMessage": {
           "required": {
             "address": "Property address is required for customerCategory Private",
             "individualDisclosure": "Property individualDisclosure is required for customerCategory Private"
-          },
-          "not": "Properties agencyId and requestType must be omitted for customerCategory Private"
+          }
         }
       }
     }
